@@ -1264,7 +1264,7 @@ def main():
         module.fail_json(msg="This module requires dbus python bindings")
 
     if not HAVE_NM_CLIENT:
-        module.fail_json(msg="This module requires NetworkManager glib API")
+        module.fail_json(msg="This module requires NetworkManager libnm API")
 
     nmcli = Nmcli(module)
 
