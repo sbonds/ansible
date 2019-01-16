@@ -20,11 +20,11 @@ DOCUMENTATION = '''
 module: nmcli
 author: "Chris Long (@alcamie101)"
 short_description: Manage Networking
-requirements: [ nmcli, dbus, NetworkManager-libnm ]
+requirements: [ nmcli, dbus ]
 version_added: "2.0"
 description:
     - Manage the network devices. Create, modify and manage various connection and device type e.g., ethernet, teams, bonds, vlans etc.
-    - "On CentOS and Fedora like systems, install dependencies as 'yum/dnf install -y python-gobject NetworkManager-libnm'"
+    - "On CentOS and Fedora like systems, install dependencies as 'yum/dnf install -y python-gobject'"
     - "On Ubuntu and Debian like systems, install dependencies as 'apt-get install -y libnm-glib-dev'"
 options:
     state:
@@ -349,8 +349,6 @@ EXAMPLES = '''
       name: '{{ item }}'
       state: installed
     with_items:
-      - NetworkManager-libnm
-      - libnm-qt-devel.x86_64
       - nm-connection-editor.x86_64
       - libsemanage-python
       - policycoreutils-python
@@ -513,15 +511,6 @@ try:
     HAVE_DBUS = True
 except ImportError:
     HAVE_DBUS = False
-
-try:
-    import gi
-    gi.require_version('NM', '1.0')
-
-    from gi.repository import NM
-    HAVE_NM_CLIENT = True
-except ImportError:
-    HAVE_NM_CLIENT = False
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
@@ -1262,9 +1251,6 @@ def main():
 
     if not HAVE_DBUS:
         module.fail_json(msg="This module requires dbus python bindings")
-
-    if not HAVE_NM_CLIENT:
-        module.fail_json(msg="This module requires NetworkManager libnm API")
 
     nmcli = Nmcli(module)
 
